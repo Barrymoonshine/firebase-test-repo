@@ -15,7 +15,7 @@
   \**********************/
 /***/ (() => {
 
-eval("console.log(\"index.js is working \");\n\n\n//# sourceURL=webpack://firebase-test-repo/./src/index.js?");
+eval("const h1Test = document.getElementById('h1-test');\n\nconst alterText = () => {\n  h1Test.innerText = 'Hello Worldssss';\n};\n\nalterText();\n\n\n//# sourceURL=webpack://firebase-test-repo/./src/index.js?");
 
 /***/ })
 
