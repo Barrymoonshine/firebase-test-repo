@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
-  getDocs,
+  onSnapshot,
   addDoc,
   deleteDoc,
   doc,
@@ -133,21 +133,17 @@ class Library {
 }
 const libraryController = new Library(libraryContainer);
 
-// get collection data
-getDocs(collectionReference)
-  .then((snapshot) => {
-    const books = [];
-    snapshot.docs.forEach((doc) => {
-      books.push({ ...doc.data(), id: doc.id });
-    });
-    myLibrary = books;
-    libraryController.createLibrary();
-    libraryController.styleHaveReadButton();
-    console.log(myLibrary);
-  })
-  .catch((err) => {
-    console.log(err);
+// real time collection data
+onSnapshot(collectionReference, (snapshot) => {
+  const books = [];
+  snapshot.docs.forEach((doc) => {
+    books.push({ ...doc.data(), id: doc.id });
   });
+  myLibrary = books;
+  libraryController.createLibrary();
+  libraryController.styleHaveReadButton();
+  console.log(myLibrary);
+});
 
 function handleForm(e) {
   e.preventDefault();
