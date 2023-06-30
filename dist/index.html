@@ -2,11 +2,92 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/normalize.css" />
     <title>Firebase experiment</title>
     <script defer src="main.js"></script>
   </head>
-  <body>
-    <h1 id="h1-test">Test Hello Repo</h1>
+  <body id="body">
+    <div class="header">My Library</div>
+    <!--Trigger/Open the new book Modal-->
+    <div class="add-book-button">
+      <button id="modal-button">+ Add book</button>
+    </div>
+    <!--The Modal-->
+    <div id="new-book-modal" class="modal">
+      <!--Modal content-->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="new-book-form">
+          <h2 class="form-title">Add a book</h2>
+          <ul>
+            <li>
+              <label for="book-title"></label>
+              <input
+                type="text"
+                id="title"
+                name="book-title"
+                placeholder="Title"
+                minlength="1"
+                required
+              />
+            </li>
+            <li>
+              <label for="author"> </label>
+              <input
+                type="text"
+                id="author"
+                name="author"
+                placeholder="Author"
+                minlength="1"
+                required
+              />
+            </li>
+            <li>
+              <label for="pages"></label>
+              <input
+                type="number"
+                id="pages"
+                name="pages"
+                min="1"
+                placeholder="Pages"
+                required
+              />
+            </li>
+            <li>
+              <label for="have-you-read"></label>
+              <p class="have-you-read-text">
+                Have you read it?
+                <input type="checkbox" id="have-read" name="have-you-read" />
+              </p>
+            </li>
+            <li class="button">
+              <label for="Submit book to library"></label>
+              <button id="submit-button" type="submit">Submit</button>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+    <!--Modal end-->
+    <main>
+      <div id="library-container"></div>
+    </main>
+
+    <div class="footer">
+      <p>
+        © Made by
+        <a href="https://github.com/Barrymoonshine">Barry Moonshine</a> for
+        <a href="https://www.theodinproject.com/">The Odin Project</a>
+      </p>
+    </div>
   </body>
 </html>

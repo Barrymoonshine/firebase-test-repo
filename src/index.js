@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import './styles.css';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDUnLD_GjN5TAhm_rFz0Y29KzB-Xwu2aRo',
