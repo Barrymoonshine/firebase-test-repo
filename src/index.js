@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
 import './styles.css';
 
 const libraryContainer = document.getElementById('library-container');
@@ -8,6 +15,7 @@ const modalButton = document.getElementById('modal-button');
 const closeModalButton = document.getElementsByClassName('close')[0];
 const newBookForm = document.getElementById('new-book-form');
 const body = document.getElementById('body');
+let myLibrary = [];
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDUnLD_GjN5TAhm_rFz0Y29KzB-Xwu2aRo',
@@ -27,19 +35,6 @@ const db = getFirestore();
 // collection ref
 const collectionReference = collection(db, 'books');
 
-// get collection data
-getDocs(collectionReference)
-  .then((snapshot) => {
-    const books = [];
-    snapshot.docs.forEach((doc) => {
-      books.push({ ...doc.data(), id: doc.id });
-    });
-    console.log(books);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 class Book {
   constructor(title, author, pages, haveRead) {
     this.title = title;
@@ -52,7 +47,6 @@ class Book {
 class Library {
   constructor(element) {
     this.libraryContainer = element;
-    this.myLibrary = [];
   }
 
   createLibrary() {
@@ -61,7 +55,7 @@ class Library {
       this.libraryContainer.removeChild(this.libraryContainer.firstChild);
     }
 
-    this.myLibrary.forEach((item, index) => {
+    myLibrary.forEach((item, index) => {
       libraryContainer.innerHTML += String.raw`
         <div class='my-library-cards' id='${index}'>
           <div>
@@ -76,7 +70,7 @@ class Library {
   }
 
   styleHaveReadButton() {
-    this.myLibrary.forEach((item, index) => {
+    myLibrary.forEach((item, index) => {
       const haveReadButton = document.getElementById(`haveRead${index}`);
       if (item.haveRead === true) {
         haveReadButton.style.backgroundColor = '#4ade80';
@@ -99,7 +93,8 @@ class Library {
       pagesValue,
       haveReadValue
     );
-    this.myLibrary.push(newBook);
+    addDoc(collectionReference, { ...newBook });
+    myLibrary.push(newBook);
   }
 
   resetForm() {
@@ -112,8 +107,9 @@ class Library {
   deleteBook(e) {
     // Deletes the selected book from the array and returns a new array
     const element = document.getElementById(e.target.id);
+    const docRef = doc();
     const index = element.id;
-    this.myLibrary.splice(index, 1);
+    myLibrary.splice(index, 1);
     this.createLibrary();
     this.styleHaveReadButton();
   }
@@ -124,15 +120,30 @@ class Library {
     if (haveReadButton.textContent === 'Read') {
       haveReadButton.style.backgroundColor = '#f87171';
       haveReadButton.innerText = 'Not read';
-      this.myLibrary[myLibraryArrayIndex].haveRead = false;
+      myLibrary[myLibraryArrayIndex].haveRead = false;
     } else if (haveReadButton.textContent === 'Not read') {
       haveReadButton.style.backgroundColor = '#4ade80';
       haveReadButton.innerText = 'Read';
-      this.myLibrary[myLibraryArrayIndex].haveRead = true;
+      myLibrary[myLibraryArrayIndex].haveRead = true;
     }
   }
 }
 const libraryController = new Library(libraryContainer);
+
+// get collection data
+getDocs(collectionReference)
+  .then((snapshot) => {
+    const books = [];
+    snapshot.docs.forEach((doc) => {
+      books.push({ ...doc.data(), id: doc.id });
+    });
+    myLibrary = books;
+    libraryController.createLibrary();
+    libraryController.styleHaveReadButton();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 function handleForm(e) {
   e.preventDefault();
