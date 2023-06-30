@@ -107,8 +107,11 @@ class Library {
   deleteBook(e) {
     // Deletes the selected book from the array and returns a new array
     const element = document.getElementById(e.target.id);
-    const docRef = doc();
     const index = element.id;
+    const firebaseID = myLibrary[index].id;
+    console.log('firebaseID', firebaseID);
+    const docRef = doc(db, 'books', firebaseID);
+    deleteDoc(docRef);
     myLibrary.splice(index, 1);
     this.createLibrary();
     this.styleHaveReadButton();
@@ -140,6 +143,7 @@ getDocs(collectionReference)
     myLibrary = books;
     libraryController.createLibrary();
     libraryController.styleHaveReadButton();
+    console.log(myLibrary);
   })
   .catch((err) => {
     console.log(err);
