@@ -6,6 +6,7 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  updateDoc,
 } from 'firebase/firestore';
 import './styles.css';
 
@@ -109,7 +110,6 @@ class Library {
     const element = document.getElementById(e.target.id);
     const index = element.id;
     const firebaseID = myLibrary[index].id;
-    console.log('firebaseID', firebaseID);
     const docRef = doc(db, 'books', firebaseID);
     deleteDoc(docRef);
     myLibrary.splice(index, 1);
@@ -120,14 +120,19 @@ class Library {
   updateReadStatus(e) {
     const haveReadButton = document.getElementById(e.target.id);
     const myLibraryArrayIndex = e.target.id.replace('haveRead', '');
+    const firebaseID = myLibrary[myLibraryArrayIndex].id;
+    console.log('firebaseID', firebaseID);
+    const docRef = doc(db, 'books', firebaseID);
     if (haveReadButton.textContent === 'Read') {
       haveReadButton.style.backgroundColor = '#f87171';
       haveReadButton.innerText = 'Not read';
       myLibrary[myLibraryArrayIndex].haveRead = false;
+      updateDoc(docRef, { haveRead: false });
     } else if (haveReadButton.textContent === 'Not read') {
       haveReadButton.style.backgroundColor = '#4ade80';
       haveReadButton.innerText = 'Read';
       myLibrary[myLibraryArrayIndex].haveRead = true;
+      updateDoc(docRef, { haveRead: true });
     }
   }
 }
